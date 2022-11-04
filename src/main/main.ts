@@ -123,6 +123,16 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+app.on('ready', () => {
+  protocol.registerFileProtocol('atom', (req, callback) => {
+    const filePath = url.fileURLToPath(
+      `file://${req.url.slice('atom://'.length)}`
+    );
+    callback({
+      path: filePath,
+    });
+  });
+});
 
 app
   .whenReady()
